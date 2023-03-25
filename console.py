@@ -38,6 +38,7 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """ processes user entry fo usage by other commands
+
         Usage: create <Class name> <param 1> <param 2> <param 3>...
         """
         _cmd = _cls = _id = _params = ''  # initialize line elements
