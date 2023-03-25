@@ -1,103 +1,89 @@
-#!/usr/bin/python3
-"""Database storage engine using SQLAlchemy with a mysql+mysqldb database
-connection.
-"""
-
-import os
-from models.base_model import Base
-from models.amenity import Amenity
-from models.city import City
-from models.place import Place
-from models.state import State
-from models.review import Review
-from models.user import User
+#!/iusr/bin/python3
+""" database storage management """
 from sqlalchemy import create_engine
+import os
 from sqlalchemy.orm import sessionmaker, scoped_session
-name2class = {
-    'Amenity': Amenity,
-    'City': City,
-    'Place': Place,
-    'State': State,
-    'Review': Review,
-    'User': User
-}
+from models.base_model import Base
+
+user = os.environ.get('HBNB_MYSQL_USER')
+password = os.environ.get('HBNB_MYSQL_PWD')
+host = os.environ.get('HBNB_MYSQL_HOST', 'localhost')
+database = os.environ.get('HBNB_MYSQL_DB')
 
 
-class DBStorage:
-    """Database Storage"""
+class DBStorage():
+    """ a class defining methods and attributes for the database """
+
     __engine = None
     __session = None
 
     def __init__(self):
-        """Initializes the object"""
-        user = os.getenv('HBNB_MYSQL_USER')
-        passwd = os.getenv('HBNB_MYSQL_PWD')
-        host = os.getenv('HBNB_MYSQL_HOST')
-        database = os.getenv('HBNB_MYSQL_DB')
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(user, passwd, host, database))
-        if os.getenv('HBNB_ENV') == 'test':
-            Base.metadata.drop_all(self.__engine)
+        """ initiliazes the class """
+        DBStorage.__engine = create_engine(
+             f'mysql+mysqldb://{user}:{password}@{host}/{database}',
+             pool_pre_ping=True
+        )
+        hbnd_env = os.environ.get('HBNB_ENV')
+        if (hbnd_env == "test"):
+            Base.metadata.drop_all(DBStorage.__engine)
 
     def all(self, cls=None):
-        """returns a dictionary of all the objects present"""
-        if not self.__session:
-            self.reload()
+        """ retrives all objects """
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+        Session = sessionmaker(bind=DBStorage.__engine)
+        DBStorage.__session = Session()
         objects = {}
-        if type(cls) == str:
-            cls = name2class.get(cls, None)
-        if cls:
-            for obj in self.__session.query(cls):
-                objects[obj.__class__.__name__ + '.' + obj.id] = obj
+        if cls is not None:
+            # Query for objects of a specific class
+            results = DBStorage.__session.query(cls).all()
         else:
-            for cls in name2class.values():
-                for obj in self.__session.query(cls):
-                    objects[obj.__class__.__name__ + '.' + obj.id] = obj
+            # Query for all types of objects
+            results = []
+            for cls in [State, City, User, Place, Review, Amenity]:
+                results.extend(DBStorage.__session.query(cls).all())
+        # Add objects to dictionary
+        for obj in results:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            objects[key] = obj
+        DBStorage.__session.close()
         return objects
 
-    def reload(self):
-        """reloads objects from the database"""
-        session_factory = sessionmaker(bind=self.__engine,
-                                       expire_on_commit=False)
-        Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(session_factory)
-
     def new(self, obj):
-        """creates a new object"""
-        self.__session.add(obj)
+        """ add a new object to the session """
+
+        DBStorage.__session.add(obj)
 
     def save(self):
-        """saves the current session"""
-        self.__session.commit()
+        """ saves an object to the database """
+
+        DBStorage.__session.commit()
 
     def delete(self, obj=None):
-        """deletes an object"""
-        if not self.__session:
-            self.reload()
-        if obj:
-            self.__session.delete(obj)
+        """ deletes an object from current session """
+        if (obj):
+            DBStorage.__session.delete(obj)
 
-    def close(self):
-        """Dispose of current session if active"""
-        self.__session.remove()
+    def reload(self):
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
 
-    def get(self, cls, id):
-        """Retrieve an object"""
-        if cls is not None and type(cls) is str and id is not None and\
-           type(id) is str and cls in name2class:
-            cls = name2class[cls]
-            result = self.__session.query(cls).filter(cls.id == id).first()
-            return result
-        else:
-            return None
+        # create all tables in the database
+        Base.metadata.create_all(DBStorage.__engine)
 
-    def count(self, cls=None):
-        """Count number of objects in storage"""
-        total = 0
-        if type(cls) == str and cls in name2class:
-            cls = name2class[cls]
-            total = self.__session.query(cls).count()
-        elif cls is None:
-            for cls in name2class.values():
-                total += self.__session.query(cls).count()
-        return total
+        # create the current database session
+        session_factory = sessionmaker(
+            bind=DBStorage.__engine,
+            expire_on_commit=False
+        )
+        DBStorage.__session = scoped_session(session_factory)
