@@ -131,11 +131,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        _cls = _args = '' # initialize line elements.
-        
-        parg = args[:] # paste the arg.
+        # split the arguments
+        s_args = args.split(' ')
 
-        _cls = parg[:parg.find(' ')] # Get the class
+        _cls = s_args[0] # Get the class
 
         # Check if the class provided exist
         if _cls not in HBNBCommand.classes.keys():
@@ -145,20 +144,21 @@ class HBNBCommand(cmd.Cmd):
         # Create the object after checking if class is in dict.
         new = HBNBCommand.classes[_cls]() 
 
-        # Extract the arguments only (excl class) and split them
-        # to create a list.
-        _args = parg[parg.find(' ') + 1:].split(' ')
+        # Extract the arguments only (excl class).
+        _args = s_args[1:]
 
-        #loop through the list of params
-        for i in _args:
-            # extract key using slicing
-            key = i[:i.find('=')]
-            # extract value using regex and replace underscore
-            # with space eg. The_Island ==> The Island.
-            val = re.search(r'(?<=")[\w.+%@-]+(?=")', i).group()
-            value = val.replace("_", " ")
-            # assign the object the key and value pair.
-            setattr(new, key, value)
+        #loop through the list of params if not NULL
+        if _args:
+            for i in _args:
+                # extract key using slicing
+                key = i[:i.find('=')]
+                # extract value using regex and replace underscore
+                # with space eg. The_Island ==> The Island.
+                val = re.search(r'(?<=")[\w.+%@-]+(?=")', i)
+                value = val if val is None else val.group()
+                value = value.replace("_", " ")
+                # assign the object the key and value pair.
+                setattr(new, key, value)
             
         storage.save()
         print(new.id)
