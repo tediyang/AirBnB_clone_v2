@@ -150,13 +150,17 @@ class HBNBCommand(cmd.Cmd):
         #loop through the list of params if not NULL
         if _args:
             for i in _args:
-                # extract key using slicing
+                # extract key using slicing.
                 key = i[:i.find('=')]
-                # extract value using regex and replace underscore
-                # with space eg. The_Island ==> The Island.
-                val = re.search(r'(?<=")[\w.+%@-]+(?=")', i)
-                value = val if val is None else val.group()
-                value = value if value is None else value.replace("_", " ")
+                # extract the val
+                ex_val = i[i.find('=') + 1:]
+                # search if ex_val is a string "".
+                val = re.search(r'(?<=")[\w.+%@-]+(?=")', ex_val)
+                # if it's not a string then parse the argument
+                # else extract the value
+                value = ex_val if val is None else val.group()
+                # replace "_" by " " eg. The_Island ==> The Island
+                value = value.replace("_", " ")
                 # assign the object the key and value pair.
                 setattr(new, key, value)
             
