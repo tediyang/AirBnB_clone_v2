@@ -156,7 +156,7 @@ class HBNBCommand(cmd.Cmd):
                 # with space eg. The_Island ==> The Island.
                 val = re.search(r'(?<=")[\w.+%@-]+(?=")', i)
                 value = val if val is None else val.group()
-                value = value.replace("_", " ")
+                value = value if value is None else value.replace("_", " ")
                 # assign the object the key and value pair.
                 setattr(new, key, value)
             
