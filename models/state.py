@@ -5,6 +5,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from os import getenv
+from models.city import City
 
 
 class State(BaseModel, Base):
@@ -22,7 +23,6 @@ class State(BaseModel, Base):
 			""" Return list of city instances with state.id. """
 			# This prevent circular import.
 			from models import storage
-			from models.city import City
 			cities_ = [obj for obj in storage.all(City).values()
                 	 if obj.state_id == self.id]
 			return cities_
