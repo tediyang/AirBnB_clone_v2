@@ -64,7 +64,7 @@ class BaseModel:
             if isinstance(value, datetime.datetime):
                 dic[key] = value.isoformat()
             elif key == "_sa_instance_state":
-                del dic[key]
+                pass
             else:
                 dic[key] = value
         return dic
