@@ -126,7 +126,7 @@ class HBNBCommand(cmd.Cmd):
             and if the class is provided doesn't exist
             ** class doesn't exist **
         """
-        
+
         if not args:
             print("** class name missing **")
             return
@@ -163,8 +163,8 @@ class HBNBCommand(cmd.Cmd):
                 value = value.replace("_", " ")
                 # assign the object the key and value pair.
                 setattr(new, key, value)
-            
-        storage.save()
+
+        new.save()
         print(new.id)
 
     def help_create(self):
