@@ -2,15 +2,8 @@
 """ File Storage for AirBnB Clone Project """
 """ Import necessary modules/ packages """
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 from models.base_model import Base
-from models.user import User
-from models.amenity import Amenity
-from models.city import City
-from models.place import Place
-from models.state import State
-from models.review import Review
 
 
 class DBStorage:
@@ -24,6 +17,7 @@ class DBStorage:
 
     def __init__(self):
         """ Creating the engine by fetching environmental variables. """
+        
         self.__engine = create_engine(
             'mysql+mysqldb://{}:{}@{}:3306/{}'
             .format(getenv("HBNB_MYSQL_USER"),
@@ -39,6 +33,13 @@ class DBStorage:
         """ Return all the object data specified or all the data
             in the database.
         """
+        from models.user import User
+        from models.amenity import Amenity
+        from models.city import City
+        from models.place import Place
+        from models.state import State
+        from models.review import Review
+
 
         # Create an empty list row to store all the row data
         # gotten from the databse.
@@ -78,6 +79,7 @@ class DBStorage:
         from models.place import Place
         from models.state import State
         from models.review import Review
+        from sqlalchemy.orm import sessionmaker, scoped_session
 
         # create the object.
         Base.metadata.create_all(self.__engine)
