@@ -72,6 +72,13 @@ class DBStorage:
 
     def reload(self):
         """ reload the objects form the db"""
+        from models.user import User
+        from models.amenity import Amenity
+        from models.city import City
+        from models.place import Place
+        from models.state import State
+        from models.review import Review
+
         # create the object.
         Base.metadata.create_all(self.__engine)
 
