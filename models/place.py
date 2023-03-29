@@ -7,11 +7,12 @@ from os import getenv
 from models.review import Review
 from models.amenity import Amenity
 
-relationship_place_amen = Table("place_amenity", Base.metadata,
-                 Column('place_id', String(60), ForeignKey('places.id'),
-                 primary_key=True, nullable=False),
-                 Column('amenity_id', String(60), ForeignKey('amenities.id'),
-                 primary_key=True, nullable=False))
+place_amen = Table("place_amenity", 
+                   Base.metadata, 
+                   Column('place_id', String(60), ForeignKey('places.id'), 
+                          primary_key=True, nullable=False), 
+                   Column('amenity_id', String(60), ForeignKey('amenities.id'), 
+                          primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -28,13 +29,13 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
-    places = relationship("Review",
-                         backref=backref("place", cascade="all,delete"),
-                         cascade="all, delete, delete-orphan",
-                         passive_deletes=True,
-                         single_parent=True)
-    amenities = relationship("Amenity", secondary='place_amenity',
-                         viewonly=False, back_populates="place_amenities")
+    places = relationship("Review", 
+                          backref=backref("place", cascade="all,delete"), 
+                          cascade="all, delete, delete-orphan", 
+                          passive_deletes=True, 
+                          single_parent=True)
+    amenities = relationship("Amenity", secondary='place_amenity', 
+                             viewonly=False, back_populates="place_amenities")
 
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
@@ -42,8 +43,8 @@ class Place(BaseModel, Base):
             """ Return list of reviews with place.id"""
             # This prevents circular import
             from models import storage
-            reviews_ = [obj for obj in storage.all(Review)
-                         if obj.place_id == self.id]
+            reviews_ = [obj for obj in storage.all(Review) 
+                        if obj.place_id == self.id]
             return reviews_
 
         @property
