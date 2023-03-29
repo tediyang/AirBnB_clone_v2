@@ -34,7 +34,7 @@ class Place(BaseModel, Base):
                          passive_deletes=True,
                          single_parent=True)
     amenities = relationship("Amenity", secondary='place_amenity',
-                         viewonly=False, backref="place")
+                         viewonly=False, back_populates="place_amenities")
 
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property

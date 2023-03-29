@@ -1,0 +1,16 @@
+{
+    "Amenity.b16b21b4-effc-443d-b9eb-b0bed05fd63d": {
+        "__class__": "Amenity",
+        "id": "b16b21b4-effc-443d-b9eb-b0bed05fd63d",
+        "created_at": "2023-03-29T02:26:26.225203",
+        "updated_at": "2023-03-29T02:26:26.225203",
+        "name": "Steve"
+    },
+    "Amenity.181ce349-acb7-4efc-b697-7d7d4a1f04bf": {
+        "__class__": "Amenity",
+        "id": "181ce349-acb7-4efc-b697-7d7d4a1f04bf",
+        "created_at": "2023-03-29T02:26:58.951425",
+        "updated_at": "2023-03-29T02:26:58.951425",
+        "name": "Steve"
+    }
+}
