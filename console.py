@@ -64,8 +64,8 @@ class HBNBCommand(cmd.Cmd):
             if pline:
                 # partition args: (<id>, [<delim>], [<*args>]).
                 # This will search for the separator in the string.
-                # If the separator is found, returns a 3-tuple containing 
-                # the part before the separator, the separator itself, 
+                # If the separator is found, returns a 3-tuple containing
+                # the part before the separator, the separator itself,
                 # and the part after it.
                 pline = pline.partition(', ')  # pline convert to tuple
 
@@ -134,7 +134,7 @@ class HBNBCommand(cmd.Cmd):
         # split the arguments
         s_args = args.split(' ')
 
-        _cls = s_args[0] # Get the class
+        _cls = s_args[0]  # Get the class
 
         # Check if the class provided exist
         if _cls not in HBNBCommand.classes.keys():
@@ -142,12 +142,12 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # Create the object after checking if class is in dict.
-        new = HBNBCommand.classes[_cls]() 
+        new = HBNBCommand.classes[_cls]()
 
         # Extract the arguments only (excl class).
         _args = s_args[1:]
 
-        #loop through the list of params if not NULL
+        # loop through the list of params if not NULL
         if _args:
             for i in _args:
                 # extract key using slicing.
@@ -360,6 +360,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
