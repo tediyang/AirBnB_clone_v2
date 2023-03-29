@@ -48,9 +48,9 @@ class BaseModel:
         return models.storage.delete(self)
 
     def to_dict(self):
-        """ returns a dictionary containing all
+        """ Returns a dictionary containing all
             keys/values of __dict__ of the instance.
-		"""
+        """
         dic = {}
         dic["__class__"] = self.__class__.__name__
 
