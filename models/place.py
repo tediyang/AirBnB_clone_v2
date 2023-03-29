@@ -2,7 +2,7 @@
 """ Place Module for AirBnB project """
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from os import getenv
 from models.review import Review
 from models.amenity import Amenity
