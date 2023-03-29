@@ -13,12 +13,12 @@ class User(BaseModel, Base):
     first_name = Column(String(128))
     last_name = Column(String(128))
     places = relationship("Place",
-                          backref=backref("user", cascade="all,delete"),
-                          cascade="all, delete, delete-orphan",
-                          passive_deletes=True,
-                          single_parent=True)
+            backref=backref("user", cascade="all,delete"),
+            cascade="all, delete, delete-orphan",
+            passive_deletes=True,
+            single_parent=True)
     reviews = relationship("Review",
-                           backref=backref("user", cascade="all,delete"),
-                           cascade="all, delete, delete-orphan",
-                           passive_deletes=True,
-                           single_parent=True)
+            backref=backref("user", cascade="all,delete"),
+            cascade="all, delete, delete-orphan",
+            passive_deletes=True,
+            single_parent=True)

@@ -8,11 +8,11 @@ from models.review import Review
 from models.amenity import Amenity
 
 place_amen = Table("place_amenity",
-                   Base.metadata,
-                   Column('place_id', String(60), ForeignKey('places.id'),
-                          primary_key=True, nullable=False),
-                   Column('amenity_id', String(60), ForeignKey('amenities.id'),
-                          primary_key=True, nullable=False))
+        Base.metadata,
+        Column('place_id', String(60), ForeignKey('places.id'),
+            primary_key=True, nullable=False),
+        Column('amenity_id', String(60), ForeignKey('amenities.id'),
+            primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -30,12 +30,12 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     amenity_ids = []
     places = relationship("Review",
-                          backref=backref("place", cascade="all,delete"),
-                          cascade="all, delete, delete-orphan",
-                          passive_deletes=True,
-                          single_parent=True)
+            backref=backref("place", cascade="all,delete"),
+            cascade="all, delete, delete-orphan",
+            passive_deletes=True,
+            single_parent=True)
     amenities = relationship("Amenity", secondary='place_amenity',
-                             viewonly=False, back_populates="place_amenities")
+            viewonly=False, back_populates="place_amenities")
 
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
@@ -44,7 +44,7 @@ class Place(BaseModel, Base):
             # This prevents circular import
             from models import storage
             reviews_ = [obj for obj in storage.all(Review)
-                        if obj.place_id == self.id]
+                if obj.place_id == self.id]
             return reviews_
 
         @property
@@ -54,8 +54,6 @@ class Place(BaseModel, Base):
 
         @amenities.setter
         def amenities(self, obj):
-            """Appends an amenity id to the attribute
-            amenity_id
-            """
+            """Appends an amenity id to the attribute amenity_id """
             if type(obj) == Amenity and obj.id not in self.amenity_ids:
                 self.amenity_ids.append(obj.id)
