@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ City module for AirBnB project """
-""" importing module """
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
