@@ -5,13 +5,14 @@ decompress it and setup the file on the server."""
 from fabric.api import run, env, put
 import os
 
+# Connect to remote using environ variables.
 env.user = "ubuntu"
 env.hosts = ["52.72.26.101", "100.25.162.157"]
 env.key_filename = '~/.ssh/id_rsa'
 
 
 def do_deploy(archive_path):
-    """ A script that distributes an archive to the web servers. """
+    """A script that distributes an archive to the web servers."""
 
     if not os.path.isfile(archive_path):
         return False
