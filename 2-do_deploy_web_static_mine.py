@@ -1,18 +1,16 @@
 #!/usr/bin/python3
-"""a script to send an archive file to a remote server,
+"""A script to send an archive file to a remote server
 decompress it and setup the file on the server."""
-
 from fabric.api import run, env, put
 import os
 
-# make connection to the server using env variables.
 env.user = "ubuntu"
 env.hosts = ["52.72.26.101", "100.25.162.157"]
 env.key_filename = '~/.ssh/id_rsa'
 
 
 def do_deploy(archive_path):
-    """ A script that distributes an archive to the web servers. """
+    """A script that distributes an archive to the web servers."""
 
     if not os.path.isfile(archive_path):
         return False
@@ -20,13 +18,14 @@ def do_deploy(archive_path):
     archive = archive_path.split("/")[-1]
     no_extension = archive.split(".")[0]
 
+    """ 
     # copy the file from local to remote.
     # create directory if not available.
     # decompress file
     # remove archive
     # move file from directory and delete directory
     # remove symbolic link
-    # create a new symlink with current web static
+    # create a new symlink with current web static """
     try:
         sym_link = "/data/web_static/current"
         path = f"/data/web_static/releases/{no_extension}/"
