@@ -5,7 +5,6 @@ decompress it and setup the file on the server."""
 from fabric.api import run, env, put
 import os
 
-# make connection to the server using env variables.
 env.user = "ubuntu"
 env.hosts = ["52.72.26.101", "100.25.162.157"]
 env.key_filename = '~/.ssh/id_rsa'
