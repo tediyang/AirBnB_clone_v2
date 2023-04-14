@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-"""a script to send an archive file to a remote server,
+"""A script to send an archive file to a remote server,
 decompress it and setup the file on the server."""
 
 from fabric.api import run, env, put
 import os
 
-""" Connect to remote using environ variables. """
+
 env.user = "ubuntu"
 env.hosts = ["52.72.26.101", "100.25.162.157"]
 env.key_filename = '~/.ssh/id_rsa'
