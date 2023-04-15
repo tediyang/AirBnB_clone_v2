@@ -26,6 +26,7 @@ def do_pack():
     except Exception as e:
         return None
 
+
 def do_deploy(archive_path):
     """a function to deploy code and decompress it"""
 
@@ -49,6 +50,7 @@ def do_deploy(archive_path):
         return True
     except Exception as e:
         return False
+
 
 def deploy():
     """function automatically convert to archive and deploy"""
