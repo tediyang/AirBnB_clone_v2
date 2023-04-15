@@ -13,7 +13,6 @@ env.key_filename = '~/.ssh/id_rsa'
 def deploy():
     """ Automatically convert to archive and deploy """
 
-    # pack the files
     archive = do_pack()
     if not archive:
         return False
