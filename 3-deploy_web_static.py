@@ -3,7 +3,7 @@
     Fabfile to deploy to remote server
 """
 
-from fabric.api import run, env, put
+from fabric.api import run, env, put, local
 from time import strftime
 import os
 
