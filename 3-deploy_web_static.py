@@ -9,9 +9,8 @@ env.user = "ubuntu"
 env.hosts = ["52.72.26.101", "100.25.162.157"]
 env.key_filename = '~/.ssh/id_rsa'
 
-
 def deploy():
-    """ Automatically convert to archive and deploy """
+    """automatically convert to archive and deploy"""
 
     archive = do_pack()
     if not archive:
