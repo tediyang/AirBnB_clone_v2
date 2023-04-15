@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" Fabfile to deploy to remote server """
+"""
+    Fabfile to deploy to remote server
+"""
 
 from fabfile.api import env
 from 1-pack_web_static import do_pack
