@@ -13,6 +13,7 @@ env.path_filename = "~/.ssh/id_rsa"
 def do_clean(number=0):
     """ clean archive files on the server """
 
+    number = int(number)
     if os.path.exists("versions/"):
         if number == 0 or number == 1:
             local("ls -1tr versions/*.tgz | head -n -1 | xargs rm -rf")
