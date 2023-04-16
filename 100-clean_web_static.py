@@ -17,14 +17,16 @@ def do_clean(number=0):
         if number == 0 or number == 1:
             local("ls -1tr versions/*.tgz | head -n -1 | xargs rm -rf")
         else:
-            local(f"ls -1tr versions/*.tgz | head -n -{number} | xargs rm -rf")
+            local("ls -1tr versions/*.tgz | head -n -{} | xargs rm -rf".format(
+                number))
 
     path = "/data/web_static/releases/*/"
     try:
         if number == 0 or number == 1:
-            run(f"sudo ls -1tr {path} | head -n -1 | xargs rm -rf")
+            run("sudo ls -1tr {} | head -n -1 | xargs rm -rf".format(path))
         else:
-            run(f"sudo ls -1tr {path} | head -n -{number} | xargs rm -rf")
+            run("sudo ls -1tr {} | head -n -{} | xargs rm -rf".format(
+                path, number))
         return True
 
     except Exception as e:
