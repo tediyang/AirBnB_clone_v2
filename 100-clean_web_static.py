@@ -13,9 +13,8 @@ env.path_filename = "~/.ssh/id_rsa"
 def do_clean(number=0):
     """ clean archive files on the server """
 
-    number = int(number)
     if os.path.exists("versions/"):
-        if number == 0 or number == 1:
+        if int(number) == 0 or int(number) == 1:
             local("ls -1tr versions/*.tgz | head -n -1 | xargs rm -rf")
         else:
             local("ls -1tr versions/*.tgz | head -n -{} | xargs rm -rf".format(
@@ -23,7 +22,7 @@ def do_clean(number=0):
 
     path = "/data/web_static/releases/*/"
     try:
-        if number == 0 or number == 1:
+        if int(number) == 0 or int(number) == 1:
             run("sudo ls -1tr {} | head -n -1 | xargs rm -rf".format(path))
         else:
             run("sudo ls -1tr {} | head -n -{} | xargs rm -rf".format(
