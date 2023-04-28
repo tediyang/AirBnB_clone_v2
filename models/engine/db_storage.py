@@ -4,6 +4,7 @@
 from sqlalchemy import create_engine
 from os import getenv
 from models.base_model import Base
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 class DBStorage:
@@ -39,18 +40,23 @@ class DBStorage:
         from models.place import Place
         from models.state import State
         from models.review import Review
-
+        
+        if not DBStorage.__session:
+            sess_factory = sessionmaker(bind=self.__engine)
+            Session = scoped_session(sess_factory)
+            DBStorage.__session = Session
+            self.__session = Session()
 
         # Create an empty list row to store all the row data
         # gotten from the databse.
         rows = []
         if cls:
-            rows = self.__session.query(cls).all() # Loaded as list of objects.
+            rows = self.__session.query(cls) # Loaded as list of objects.
         else:
             classes = [User, State, City, Amenity, Place, Review]
             for class_ in classes:
                 # add each row of object in lsist to the list.
-                rows += self.__session.query(class_).all()
+                rows += self.__session.query(class_)
         return {f'{row_obj.__class__.__name__}.{row_obj.id}': row_obj
                  for row_obj in rows}
 
@@ -80,17 +86,16 @@ class DBStorage:
         from models.place import Place
         from models.state import State
         from models.review import Review
-        from sqlalchemy.orm import sessionmaker, scoped_session
 
         # create the object.
         Base.metadata.create_all(self.__engine)
 
         # Generate session that links to the current database.
-        sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=True)
         Session = scoped_session(sess_factory)
+        DBStorage.__session = Session
         self.__session = Session()
 
     def close(self):
         """ Close the session """
-        self.__session.close()
-        self.reload()
+        DBStorage.__session.remove()
