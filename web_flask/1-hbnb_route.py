@@ -9,6 +9,7 @@ def hello_hbnb():
     """Handles the root url"""
     return "Hello HBNB!"
 
+
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
     """url to display hbnb"""
