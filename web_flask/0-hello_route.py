@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
 def hello():
-	""" print hello hbnb """
-	return "Hello HBNB!"
+    """ print hello hbnb """
+    return "Hello HBNB!"
 
 
 if __name__ == "__main__":
