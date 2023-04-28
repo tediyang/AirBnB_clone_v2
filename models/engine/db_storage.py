@@ -4,7 +4,6 @@
 from sqlalchemy import create_engine
 from os import getenv
 from models.base_model import Base
-from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 class DBStorage:
@@ -41,18 +40,17 @@ class DBStorage:
         from models.state import State
         from models.review import Review
 
-        Session = sessionmaker(bind=self.__engine)
-        self.__session = Session()
+
         # Create an empty list row to store all the row data
         # gotten from the databse.
         rows = []
         if cls:
-            rows = self.__session.query(cls).all() # Loaded as list of objects.
+            rows = DBStorage.__session.query(cls) # Loaded as list of objects.
         else:
             classes = [User, State, City, Amenity, Place, Review]
             for class_ in classes:
                 # add each row of object in lsist to the list.
-                rows += self.__session.query(class_).all()
+                rows += DBStorage.__session.query(class_)
         return {f'{row_obj.__class__.__name__}.{row_obj.id}': row_obj
                  for row_obj in rows}
 
@@ -61,17 +59,17 @@ class DBStorage:
             but check if the obj is present. """
         if not obj:
             return        
-        self.__session.add(obj)
+        DBStorage.__session.add(obj)
 
     def save(self):
         """ commit changes to db """
-        self.__session.commit()
+        DBStorage.__session.commit()
 
     def delete(self, obj):
         """ delete object from db"""
         if not obj:
             return
-        self.__session.delete(obj)
+        DBStorage.__session.delete(obj)
         self.save()
 
     def reload(self):
@@ -82,15 +80,16 @@ class DBStorage:
         from models.place import Place
         from models.state import State
         from models.review import Review
+        from sqlalchemy.orm import sessionmaker, scoped_session
 
         # create the object.
         Base.metadata.create_all(self.__engine)
 
         # Generate session that links to the current database.
-        sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=True)
+        sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
-        self.__session = Session()
+        DBStorage.__session = Session()
 
     def close(self):
         """ Close the session """
-        self.__session.close()
+        DBStorage.__session.close()
