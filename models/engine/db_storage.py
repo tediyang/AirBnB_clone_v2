@@ -45,12 +45,12 @@ class DBStorage:
         # gotten from the databse.
         rows = []
         if cls:
-            rows = DBStorage.__session.query(cls) # Loaded as list of objects.
+            rows = self.__session.query(cls) # Loaded as list of objects.
         else:
             classes = [User, State, City, Amenity, Place, Review]
             for class_ in classes:
                 # add each row of object in lsist to the list.
-                rows += DBStorage.__session.query(class_)
+                rows += self.__session.query(class_)
         return {f'{row_obj.__class__.__name__}.{row_obj.id}': row_obj
                  for row_obj in rows}
 
@@ -59,17 +59,17 @@ class DBStorage:
             but check if the obj is present. """
         if not obj:
             return        
-        DBStorage.__session.add(obj)
+        self.__session.add(obj)
 
     def save(self):
         """ commit changes to db """
-        DBStorage.__session.commit()
+        self.__session.commit()
 
     def delete(self, obj):
         """ delete object from db"""
         if not obj:
             return
-        DBStorage.__session.delete(obj)
+        self.__session.delete(obj)
         self.save()
 
     def reload(self):
@@ -88,8 +88,9 @@ class DBStorage:
         # Generate session that links to the current database.
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
-        DBStorage.__session = Session()
+        DBStorage.__session = scoped_session(sess_factory)
+        self.__session = Session()
 
     def close(self):
         """ Close the session """
-        DBStorage.__session.close()
+        DBStorage.__session.remove()
