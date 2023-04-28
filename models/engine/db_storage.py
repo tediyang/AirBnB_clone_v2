@@ -4,6 +4,7 @@
 from sqlalchemy import create_engine
 from os import getenv
 from models.base_model import Base
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 class DBStorage:
@@ -40,7 +41,8 @@ class DBStorage:
         from models.state import State
         from models.review import Review
 
-
+        Session = sessionmaker(bind=self.__engine)
+        self.__session = Session()
         # Create an empty list row to store all the row data
         # gotten from the databse.
         rows = []
@@ -80,13 +82,12 @@ class DBStorage:
         from models.place import Place
         from models.state import State
         from models.review import Review
-        from sqlalchemy.orm import sessionmaker, scoped_session
 
         # create the object.
         Base.metadata.create_all(self.__engine)
 
         # Generate session that links to the current database.
-        sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=True)
         Session = scoped_session(sess_factory)
         self.__session = Session()
 
