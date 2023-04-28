@@ -39,7 +39,7 @@ def number(n):
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def number_template(n):
     """diplaying number template if only n is int"""
-    render_template(5-number.html, n=n)
+    render_template('5-number.html', n=n)
 
 
 if __name__ == "__main__":
