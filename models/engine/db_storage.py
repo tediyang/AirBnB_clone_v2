@@ -47,12 +47,12 @@ class DBStorage:
         # gotten from the databse.
         rows = []
         if cls:
-            rows = self.__session.query(cls) # Loaded as list of objects.
+            rows = self.__session.query(cls).all() # Loaded as list of objects.
         else:
             classes = [User, State, City, Amenity, Place, Review]
             for class_ in classes:
                 # add each row of object in lsist to the list.
-                rows += self.__session.query(class_)
+                rows += self.__session.query(class_).all()
         return {f'{row_obj.__class__.__name__}.{row_obj.id}': row_obj
                  for row_obj in rows}
 
