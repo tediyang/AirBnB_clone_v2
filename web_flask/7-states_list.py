@@ -12,22 +12,23 @@ After each request you must remove the current SQLAlchemy Session:
     name (A->Z) tip
     LI tag: description of one State: <state.id>: <B><state.name></B>
 """
-from flask import Flask, render_template
+from flask import Flask
+from flask import render_template
+from models.state import State
 from models import storage
-
 app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def teardown_exception(exception):
-    """ Teardown """
-    storage.close()
+def teardown():
+    """ Close the session """
+    return storage.close()
 
 
-@app.route("/states_list", strict_slashes=False)
-def display_states():
-    """ Function called with /states_list route """
-    states = storage.all('State')
+@app.route('/states_list', strict_slashes=False)
+def state_list():
+    """ state list function """
+    states = storage.all(State)
     return render_template("7-states_list.html", states=states)
 
 
