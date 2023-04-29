@@ -18,8 +18,6 @@ def state_list():
     """ state list function """
     states = storage.all(state.State)
     return render_template("7-states_list.html", state=state)
-    
-    
 
 
 if __name__ == "__main__":
