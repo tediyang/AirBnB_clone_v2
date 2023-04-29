@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Display the States data stored in the database """
+
 from flask import Flask
 from flask import render_template
 from models.state import State
