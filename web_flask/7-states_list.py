@@ -1,22 +1,22 @@
 #!/usr/bin/python3
-""" Display the States data stored in the database """
+""" A script that starts a flask web application """
 
-from flask import Flask
-from flask import render_template
-from models.state import State
+from flask import Flask, render_template
 from models import storage
+from models.state import State
+
 app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def teardown():
-    """ Close the session """
-    return storage.close()
+def teardown_exception(exception):
+    """ Teardown """
+    storage.close()
 
 
-@app.route('/states_list', strict_slashes=False)
-def state_list():
-    """ state list function """
+@app.route("/states_list", strict_slashes=False)
+def display_states():
+    """ Function called with /states_list route """
     states = storage.all(State)
     return render_template("7-states_list.html", states=states)
 
