@@ -6,8 +6,8 @@
     <BODY>
         <H1>States</H1>
         <UL>
-        {% for key, value in state.items() %}
-            <LI>Number: {{ n }} is odd</H1>
+        {% for state_obj in state.values()|sort(attribute="name") %}
+            <LI>{{ state_obj.id }}: <B>{{ state_obj.name }}</B></LI>
         {% endfor %}
         </UL>
     </BODY>
