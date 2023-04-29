@@ -9,7 +9,8 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """ Returns a dictionary of objectss currently in storage. """
+        """ Returns a dictionary of objectss currently in storage.
+            {"<object_name>.<object_id>": object}"""
         # If obj is None do nothing.
         if not cls:
             return FileStorage.__objects
@@ -27,7 +28,8 @@ class FileStorage:
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
-        """Saves storage dictionary to file"""
+        """Saves storage dictionary to file
+            {"<object_name>.<object_id>": {object.to_dict()}}"""
         with open(FileStorage.__file_path, 'w') as f:
             temp = {}
             """ Update the dictionary by passing in key:value pairs dict
