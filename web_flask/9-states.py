@@ -30,10 +30,10 @@ def state_list():
 
 
 @app.route('/states/<id>', strict_slashes=False)
-def state_list(id):
+def state_city_list(id):
     """ Get state and cities with the provided id. """
     states = storage.all(State)
-    for state_obj in all_states.values():
+    for state_obj in states.values():
         if state_obj.id == id:
             state = state_obj
             return render_template("9-states.html", states=state, id=id)
