@@ -13,12 +13,12 @@ class FileStorage:
             {"<object_name>.<object_id>": object}"""
         # If obj is None do nothing.
         if not cls:
-            return FileStorage.__objects
+            return self.__objects
         
         #create a dummy dictionary
         dummy = {}
         # loop into dictionary and check key if class name is present.
-        for key, value in FileStorage.__objects.items():
+        for key, value in self.__objects.items():
             if cls.__name__ in key:
                 dummy[key] = value
         return dummy
@@ -30,11 +30,11 @@ class FileStorage:
     def save(self):
         """Saves storage dictionary to file
             {"<object_name>.<object_id>": {object.to_dict()}}"""
-        with open(FileStorage.__file_path, 'w') as f:
+        with open(self.__file_path, 'w') as f:
             temp = {}
             """ Update the dictionary by passing in key:value pairs dict
             of the previously loaded data. """
-            temp.update(FileStorage.__objects)
+            temp.update(self.__objects)
             for key, val in temp.items():
                 temp[key] = val.to_dict()
             json.dump(temp, f, indent=4)
@@ -47,7 +47,7 @@ class FileStorage:
 
         # Extract data to generate the key.
         key = f'{obj.__class__.__name__}.{obj.id}'
-        del FileStorage.__objects[key]
+        del self.__objects[key]
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -65,10 +65,9 @@ class FileStorage:
                     'Review': Review
                   }
         try:
-            temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
+            with open(self.__file_path, 'r') as f:
                 temp = json.load(f)
-                """ Since the values are saved in FileStorage.__objects as:
+                """ Since the values are saved in self.__objects as:
                     e.g Place.123456678 : Place 
                     # meaning --- The Place (object has all its attributes/ values)
                     Then we have to load the data into FileStorage by passing
