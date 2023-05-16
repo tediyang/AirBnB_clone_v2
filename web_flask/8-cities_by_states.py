@@ -9,25 +9,24 @@
     Routes:
     //cities_by_states: display a HTML page: (inside the tag BODY)
 """
-from flask import Flask
-from flask import render_template
-from models.state import State
+from flask import Flask, render_template
 from models import storage
+
 app = Flask(__name__)
 
 
 @app.route('/cities_by_states', strict_slashes=False)
-def state_list():
-    """ state list function """
-    states = storage.all(State)
-    return render_template("8-cities_by_states.html", states=states)
+def cities_in_state():
+    """renders a template that displayes the cities in a state"""
+    states = storage.all('State').values()
+    return render_template('8-cities_by_states.html', states=states)
 
 
 @app.teardown_appcontext
-def teardown():
-    """ Close the session """
-    return storage.close()
+def teardown_db(exception):
+    """closes the storage on teardown"""
+    storage.close()
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host='0.0.0.0', port='5000')

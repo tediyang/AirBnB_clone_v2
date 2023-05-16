@@ -9,35 +9,36 @@
     Routes:
     /9-states: display a HTML page: (inside the tag BODY)
 """
+from models import storage
 from flask import Flask
 from flask import render_template
-from models.state import State
-from models import storage
+
 app = Flask(__name__)
 
 
+@app.route("/states", strict_slashes=False)
+def states():
+    """Displays an HTML page with a list of all States.
+    States are sorted by name.
+    """
+    states = storage.all("State")
+    return render_template("9-states.html", state=states)
+
+
+@app.route("/states/<id>", strict_slashes=False)
+def states_id(id):
+    """Displays an HTML page with info about <id>, if it exists."""
+    for state in storage.all("State").values():
+        if state.id == id:
+            return render_template("9-states.html", state=state)
+    return render_template("9-states.html")
+
+
 @app.teardown_appcontext
-def teardown():
-    """ Close the session """
-    return storage.close()
-
-
-@app.route('/states', strict_slashes=False)
-def state_list():
-    """ state list function """
-    states = storage.all(State)
-    return render_template("9-states.html", states=states, id=None)
-
-
-@app.route('/states/<id>', strict_slashes=False)
-def state_city_list(id):
-    """ Get state and cities with the provided id. """
-    states = storage.all(State)
-    for state_obj in states.values():
-        if state_obj.id == id:
-            state = state_obj
-            return render_template("9-states.html", states=state, id=id)
+def teardown(exc):
+    """Remove the current SQLAlchemy session."""
+    storage.close()
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port='5000')
